@@ -16,27 +16,21 @@ BASE_URL = 'https://vancouver.craigslist.org'
 
 # run chrome and get craigslist page
 driver = webdriver.Chrome(options=options, executable_path=DRIVER_PATH)
-driver.get('https://vancouver.craigslist.org/d/for-sale/search/sss?sort=date&query=pokemon')
 
-#parse html
-soup = BeautifulSoup(driver.page_source, 'html.parser')
-
-#all results for page
-
-
-
-def nextPage(pageLink):
+#all results on all pages
+def startSearch(pageLink):
   driver.get(BASE_URL + pageLink)
   soup = BeautifulSoup(driver.page_source, 'html.parser')
 
   for post in soup.find_all('a', class_='result-title'):
     print(post.text + ' - ' + post['href'])
-    
+
   nextButton = soup.find('a', class_='next')
   if nextButton is None: return
-  nextPage(nextButton.get('href'))
+  startSearch(nextButton.get('href'))
 
-nextPage('/d/for-sale/search/sss?sort=date&query=pokemon')
+
+startSearch('/d/for-sale/search/sss?sort=date&query=pokemon')
 
 
 driver.quit()
