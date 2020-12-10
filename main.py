@@ -2,7 +2,9 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 from datetime import datetime
-
+from decouple import config
+import smtplib
+from email.message import EmailMessage
 
 # make chrome headless
 options = Options()
@@ -24,6 +26,7 @@ QUERY = 'pokemon'
 #all results on all pages
 allPosts = []
 
+
 def startSearch(pageLink):
   driver.get(BASE_URL + pageLink)
   soup = BeautifulSoup(driver.page_source, 'html.parser')
@@ -32,19 +35,31 @@ def startSearch(pageLink):
   if nextButton is None: return allPosts
   startSearch(nextButton.get('href'))
 
+def formatSearch(posts):
+  postForEmail = ''
+  for i, post in enumerate(posts):
+    postTime = post.find('time').get('datetime')
+    postTimeFormatted = datetime.strptime(postTime, '%Y-%m-%d %H:%M')
+    ellapsedTime = (datetime.now() - postTimeFormatted)
+    postTitle = post.find('a', class_='result-title').get_text()
+    postURL = post.find('a', class_='result-title')['href']
+
+    postForEmail += f'{i} - {ellapsedTime}:    {postTitle} - {postURL} \n'
+  return postForEmail
+
 startSearch(f'/d/for-sale/search/sss?sort=date&query={QUERY}')
 
+EMAIL_ADDRESS = config('EMAIL_USER')
+EMAIL_PASSWORD = config('EMAIL_PASS')
+msg = EmailMessage()
+msg['Subject'] = 'Craigslist scrape'
+msg['From'] = EMAIL_ADDRESS
+msg['To'] = EMAIL_ADDRESS
+msg.set_content(formatSearch(allPosts))
 
-for i, post in enumerate(allPosts):
-  postTime = post.find('time').get('datetime')
-  postTimeFormatted = datetime.strptime(postTime, '%Y-%m-%d %H:%M')
-  ellapsedTime = (datetime.now() - postTimeFormatted)
-  postTitle = post.find('a', class_='result-title').get_text()
-  postURL = post.find('a', class_='result-title')['href']
+with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+  smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
 
-  print(f'{i} - {ellapsedTime}:    {postTitle} - {postURL}')
-  
-
+  smtp.send_message(msg)
 
 driver.quit()
-  # for post in soup.find_all('li', class_='result-row'):
