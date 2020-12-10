@@ -17,7 +17,7 @@
   * [Chromedriver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
         
         E.g. `options.binary_location = '/usr/bin/google-chrome-stable'`
-              `DRIVER_PATH = '/home/vongsana/projects/web-scraper/chromedriver'`
+             `DRIVER_PATH = '/home/vongsana/projects/web-scraper/chromedriver'`
 
 2. Edit main.py - edit line 24 to equal your craigslist search.
 
