@@ -12,17 +12,23 @@
 
 ## Setup
 
-1. Edit main.py - change line 24 to equal your craigslist search.
+1. Install Chrome and Chromedriver. Verify that the versions are compatible.After installed, edit line 15 to equal the path of chrome's location and edit line 18 to equal the path to chromedriver.
+  * [Chrome](https://www.google.com/chrome/)
+  * [Chromedriver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
+        
+        E.g. `options.binary_location = '/usr/bin/google-chrome-stable'`
+              `DRIVER_PATH = '/home/vongsana/projects/web-scraper/chromedriver'`
 
-`QUERY = 'YOUR_SEARCH'`
+2. Edit main.py - edit line 24 to equal your craigslist search.
 
-2. Create a .env file to fill in your email credientials. (For security purposes, it would be best to use tokens or app passwords if your email provided supports it) 
+       E.g. `QUERY = 'YOUR_SEARCH'`
 
-`EMAIL_USER=YOUR_EMAIL_ADDRESS`
+3. Create a .env file to fill in your email credientials. (For security purposes, it would be best to use tokens or app passwords if your email provided supports it) 
 
-`EMAIL_PASS=YOUR_EMAIL_PASSWODE/TOKEN`
+       E.g. `EMAIL_USER=YOUR_EMAIL_ADDRESS`
+            `EMAIL_PASS=YOUR_EMAIL_PASSWODE/TOKEN`
 
-3. Run the script. (Run according to your needs) I have personally choice to create a scheduled task on a Windows machine to run the script according to my needs. This way I do not have a server running the entire time and have the email send all results so a database is not replied upon. 
+4. Run the script. (Run according to your needs) I have personally choice to create a scheduled task on a Windows machine to run the script according to my needs. This way I do not have a server running the entire time and have the email send all results so a database is not replied upon. 
 
 ## Optional/Future Improvements
 
